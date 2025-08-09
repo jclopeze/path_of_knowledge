@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__
+.ipynb_checkpoints/
+
+.vscode/
+
+*.csv
+*.zip
+*.sh
+.env
