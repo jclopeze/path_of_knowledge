@@ -62,6 +62,7 @@ IQR = Q3 - Q1
 ## Covariance and Correlation
 
 Covariance is the paired analogue of variance. Whereas variance measures how a single variable deviates from its mean, **covariance measures how two variables vary in tandem from their means**
+
 ![](./assets/cov_formula.jpg)
 
 Recall that dot sums up the products of corresponding pairs of elements. When corresponding elements of x and y are either both above their means or both below their means, a positive number enters the sum. When one is above its mean and the other below, a negative number enters the sum. Accordingly, a "large" positive covariance means that x tends to be large when y is large and small when y is small. A "large" negative covariance means the opposite. A covariance close to zero means that no such relationship exists.
