@@ -631,7 +631,7 @@ model_w,model_b = run_gradient_descent_feng(X, y, iterations=10000, alpha=1e-7)
 ![img](./assets/poly_feat3.png)
 
 Note the value of $\mathbf{w}$, `[0.08 0.54 0.03]` and b is `0.0106`.This implies the model after fitting/training is:
-$$ 0.08x + 0.54x^2 + 0.03x^3 + 0.0106 $$
+$`0.08x + 0.54x^2 + 0.03x^3 + 0.0106`$
 Gradient descent has **emphasized the data that is the best fit** to the $x^2$ data by increasing the $w_1$ term relative to the others.  If you were to run for a very long time, it would continue to reduce the impact of the other terms.
 >Gradient descent is picking the 'correct' features for us by emphasizing its associated parameter
 
@@ -788,7 +788,7 @@ In the figure below, note how the function $z = w \cdot x + b$ (the familiar lin
 
 ### Decision Boundary
 
-* In eq. (2) we interpret the output of the model ($f_{\mathbf{w},b}(x)$) as the probability that $y=1$ given $\mathbf{x}$ and parameterized by $\mathbf{w}$ and $b$.
+* In eq. (2) we interpret the output of the model ($`f_{\mathbf{w},b}(x)`$) as the probability that $y=1$ given $\mathbf{x}$ and parameterized by $\mathbf{w}$ and $b$.
 * Therefore, to get a final prediction ($y=0$ or $y=1$) from the logistic regression model, we can use the following heuristic:
 
   if $f_{\mathbf{w},b}(x) >= 0.5$, predict $y=1$
