@@ -207,10 +207,10 @@ Let's think a bit about how you might interpret these parameters: if the model i
 Each row of the matrix represents one example. When you have $m$ training examples, and there are $n$ features, $\mathbf{X}$ is a matrix with dimensions ($m$, $n$) (m rows, n columns).
 
 $$ \mathbf{X} = \begin{pmatrix}
-x^{(0)}_0 & x^{(0)}_1 & \cdots & x^{(0)}_{n-1} \\
-x^{(1)}_0 & x^{(1)}_1 & \cdots & x^{(1)}_{n-1} \\
-\cdots \\
-x^{(m-1)}_0 & x^{(m-1)}_1 & \cdots & x^{(m-1)}_{n-1}
+w_0 \\
+w_1 \\
+\cdots\\
+w_{n-1}
 \end{pmatrix}
 $$
 
