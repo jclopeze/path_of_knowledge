@@ -27,7 +27,7 @@ The gradient is defined as:
 
 $$
 \begin{align}
-\frac{\partial J(w,b)}{\partial w} = \frac{1}{m} \sum_i (f_{w,b}(x^{(i)}) - y^{(i)})x^{(i)} \\
+\frac{\partial J(w,b)}{\partial w} = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)})x^{(i)} \\
 \frac{\partial J(w,b)}{\partial b} = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)}) \\
 \end{align}
 $$
@@ -56,14 +56,14 @@ From this sensitivity, the gradient pops out:
 * Loss per example is $\tfrac12 e_i^2$ with $e_i=\hat y_i-y_i$.
 * A tiny change $\delta$ to $w_j$ changes that example’s loss by
 
-  $$
-  \Delta(\tfrac12 e_i^2)\approx e_i \cdot \Delta e_i \;=\; e_i \cdot (\Delta \hat y_i) \;=\; e_i \cdot (\delta\,x_{ij}).
-  $$
+$$
+\Delta(\tfrac12 e_i^2)\approx e_i \cdot \Delta e_i \;=\; e_i \cdot (\Delta \hat y_i) \;=\; e_i \cdot (\delta\,x_{ij}).
+$$
 * Summing over examples and dividing by $m$ gives
 
-  $$
-  \frac{\partial J}{\partial w_j}=\frac{1}{m}\sum_{i=1}^m e_i\,x_{ij}.
-  $$
+$$
+\frac{\partial J}{\partial w_j}=\frac{1}{m}\sum_{i=1}^m e_i\,x_{ij}.
+$$
 
 So the gradient is an **error-weighted average of feature values** because each example’s “vote” for changing $w_j$ should be scaled by how much a change in $w_j$ would have affected that example’s prediction in the first place (its sensitivity $x_{ij}$).
 
