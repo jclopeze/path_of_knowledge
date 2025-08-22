@@ -258,6 +258,7 @@ def predict(x, w, b):
 
 ### Compute Cost With Multiple Variables
 The equation for the cost function with multiple variables $J(\mathbf{w},b)$ is:
+
 $$
 J(\mathbf{w},b) = \frac{1}{2m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})^2
 $$
@@ -520,8 +521,8 @@ where $j$ selects a feature or a column in the $\mathbf{X}$ matrix. $µ_j$ is th
 
 $$
 \begin{align}
-\mu_j &= \frac{1}{m} \sum_{i=0}^{m-1} x^{(i)}_j \\
-\sigma^2_j &= \frac{1}{m} \sum_{i=0}^{m-1} (x^{(i)}_j - \mu_j)^2
+\mu_j = \frac{1}{m} \sum_{i=0}^{m-1} x^{(i)}_j \\
+\sigma^2_j = \frac{1}{m} \sum_{i=0}^{m-1} (x^{(i)}_j - \mu_j)^2
 \end{align}
 $$
 
