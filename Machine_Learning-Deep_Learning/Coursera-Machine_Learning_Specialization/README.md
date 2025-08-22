@@ -855,12 +855,7 @@ Logistic Regression uses a loss function more suited to the task of categorizati
 This is defined:
 * $loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)})$ is the cost for a single data point, which is:
 
-$$
-loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)}) = \begin{cases}
-- \log\left(f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right) & \text{if $y^{(i)}=1$}\\
-- \log \left( 1 - f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right) & \text{if $y^{(i)}=0$}
-\end{cases}
-$$
+![img](./assets/logreg_loss4.jpg)
 
 *  $f_{\mathbf{w},b}(\mathbf{x}^{(i)})$ is the model's prediction, while $y^{(i)}$ is the target value.
 
@@ -871,11 +866,13 @@ The defining feature of this loss function is the fact that it uses two separate
 ![img](./assets/logreg_loss2.jpg)
 
 The loss function above can be rewritten to be easier to implement.
+
 $$
-loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)}) = (-y^{(i)} \log\left(f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right) - \left( 1 - y^{(i)}\right) \log \left( 1 - f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right)$$
+loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)}) = (-y^{(i)} \log\left(f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right) - \left( 1 - y^{(i)}\right) \log \left( 1 - f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right)
+$$
 
 Consider $y^{(i)}$ can have only two values, 0 and 1. One can then consider the equation in two pieces:
-when $ y^{(i)} = 0$, the left-hand term is eliminated:
+when $`y^{(i)} = 0`$, the left-hand term is eliminated:
 
 $$
 \begin{align}
@@ -883,7 +880,7 @@ loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), 0) &= -\log \left( 1 - f_{\mathbf{w},b}
 \end{align}
 $$
 
-and when $ y^{(i)} = 1$, the right-hand term is eliminated:
+and when $`y^{(i)} = 1`$, the right-hand term is eliminated:
 
 $$
 \begin{align}
