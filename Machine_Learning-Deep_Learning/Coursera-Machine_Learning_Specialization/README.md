@@ -14,11 +14,10 @@ $$ J(w,b) = \frac{1}{2m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)})^
 *Gradient descent* is described as:
 
 $$
-\text{repeat until convergence: } \lbrace \newline
+\text{repeat until convergence:} \lbrace \newline
 w = w - \alpha \frac{\partial J(w,b)}{\partial w} \newline
 b = b - \alpha \frac{\partial J(w,b)}{\partial b} \newline
 \rbrace
-
 $$
 
 where, parameters $w$, $b$ are updated simultaneously.
