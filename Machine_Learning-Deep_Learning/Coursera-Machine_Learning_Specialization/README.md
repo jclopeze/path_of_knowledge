@@ -14,11 +14,11 @@ $$ J(w,b) = \frac{1}{2m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)})^
 *Gradient descent* is described as:
 
 $$
-\begin{align*} \text{repeat until convergence: } \lbrace \newline
+\text{repeat until convergence: } \lbrace \newline
 w = w - \alpha \frac{\partial J(w,b)}{\partial w} \newline
 b = b - \alpha \frac{\partial J(w,b)}{\partial b} \newline
 \rbrace
-\end{align*}
+
 $$
 
 where, parameters $w$, $b$ are updated simultaneously.
@@ -26,10 +26,8 @@ where, parameters $w$, $b$ are updated simultaneously.
 The gradient is defined as:
 
 $$
-\begin{align}
 \frac{\partial J(w,b)}{\partial w} = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)})x^{(i)} \\
 \frac{\partial J(w,b)}{\partial b} = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)}) \\
-\end{align}
 $$
 
 Here *simultaniously* means that you calculate the partial derivatives for all the parameters before updating any of the parameters.
@@ -297,19 +295,19 @@ def compute_cost(X, y, w, b):
 ### Gradient Descent With Multiple Variables
 Gradient descent for multiple variables:
 
-$$ \begin{align*} \text{repeat}&\text{ until convergence:} \; \lbrace \newline\;
-& w_j = w_j -  \alpha \frac{\partial J(\mathbf{w},b)}{\partial w_j}  \; & \text{for j = 0..n-1}\newline
-&b\ \ = b -  \alpha \frac{\partial J(\mathbf{w},b)}{\partial b}  \newline \rbrace
-\end{align*} $$
+$$
+\text{repeat until convergence:} \; \lbrace \newline\;
+w_j = w_j -  \alpha \frac{\partial J(\mathbf{w},b)}{\partial w_j}  \; \text{for j = 0..n-1}\newline
+b\ \ = b -  \alpha \frac{\partial J(\mathbf{w},b)}{\partial b}  \newline \rbrace
+$$
 
 where, n is the number of features, parameters $w_j$,  $b$, are updated simultaneously and where
 
 $$
-\begin{align}
-\frac{\partial J(\mathbf{w},b)}{\partial w_j}  &= \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})x_{j}^{(i)} \\
-\frac{\partial J(\mathbf{w},b)}{\partial b}  &= \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})
-\end{align}
+\frac{\partial J(\mathbf{w},b)}{\partial w_j}  = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})x_{j}^{(i)} \\
+\frac{\partial J(\mathbf{w},b)}{\partial b}  = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})
 $$
+
 * m is the number of training examples in the data set
 
 
@@ -520,12 +518,9 @@ $$
 where $j$ selects a feature or a column in the $\mathbf{X}$ matrix. $µ_j$ is the mean of all the values for feature (j) and $\sigma_j$ is the standard deviation of feature (j).
 
 $$
-\begin{align}
-\mu_j = \frac{1}{m} \sum_{i=0}^{m-1} x^{(i)}_j \\
+\mu_j = \frac{1}{m} \sum_{i=0}^{m-1} x^{(i)}_j\\
 \sigma^2_j = \frac{1}{m} \sum_{i=0}^{m-1} (x^{(i)}_j - \mu_j)^2
-\end{align}
 $$
-
 
 >**Implementation Note:** it is important to store the values used for normalization. Given a new x value, we must first normalize x using the mean and standard deviation that we had previously computed from the training set.
 
