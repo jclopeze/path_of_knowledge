@@ -595,7 +595,7 @@ What if your features/data are non-linear or are combinations of features?
 
 ![img](./assets/poly_feat1.png)
 
-No amount of adjusting of $\mathbf{w}$,$\mathbf{b}$ in linear regression will achieve a fit to a non-linear curve.
+No amount of adjusting of $w$, $b$ in linear regression will achieve a fit to a non-linear curve.
 What is needed is something like $y= w_0x_0^2 + b$, or a **polynomial feature**.
 To accomplish this, you can modify the *input data* to *engineer* the needed features. If you swap the original data with a version that squares the $x$ value, then you can achieve $y= w_0x_0^2 + b$. Let's try it. Swap `X` for `X**2` below:
 ```python
@@ -612,7 +612,7 @@ model_w, model_b = run_gradient_descent_feng(X, y, iterations=10000, alpha = 1e-
 
 ![img](./assets/poly_feat2.png)
 
-Great! near perfect fit. Notice the values of $\mathbf{w}$ and b printed right above the graph: `w,b found by gradient descent: w: [1.], b: 0.0490`. Gradient descent modified our initial values of $\mathbf{w},b $ to be (1.0,0.049) or a model of $y=1*x_0^2+0.049$, very close to our target of $y=1*x_0^2+1$. If you ran it longer, it could be a better match.
+Great! near perfect fit. Notice the values of $\mathbf{w}$ and b printed right above the graph: `w,b found by gradient descent: w: [1.], b: 0.0490`. Gradient descent modified our initial values of $w$ and $b$ to be `(1.0, 0.049)` or a model of $y=1*x_0^2+0.049$ , very close to our target of $y=1*x_0^2+1$ . If you ran it longer, it could be a better match.
 
 #### Selecting Features
 Above, we knew that an $x^2$ term was required. It may not always be obvious which features are required. One could add a variety of potential features to try and find the most useful. For example, what if we had instead tried : $y=w_0x_0 + w_1x_1^2 + w_2x_2^3+b$ ?
