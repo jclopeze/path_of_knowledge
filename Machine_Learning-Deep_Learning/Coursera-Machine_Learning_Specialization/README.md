@@ -14,15 +14,16 @@ $$ J(w,b) = \frac{1}{2m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)})^
 *Gradient descent* is described as:
 
 $$ \begin{align*} \text{repeat}&\text{ until convergence:} \; \lbrace \newline
-\;  w &= w -  \alpha \frac{\partial J(w,b)}{\partial w} \tag{3}  \; \newline
+\;  w &= w -  \alpha \frac{\partial J(w,b)}{\partial w}   \; \newline
  b &= b -  \alpha \frac{\partial J(w,b)}{\partial b}  \newline \rbrace
-\end{align*}$$
+\end{align*} $$
+
 where, parameters $w$, $b$ are updated simultaneously.
 The gradient is defined as:
 $$
 \begin{align}
-\frac{\partial J(w,b)}{\partial w}  &= \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)})x^{(i)} \tag{4}\\
-  \frac{\partial J(w,b)}{\partial b}  &= \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)}) \tag{5}\\
+\frac{\partial J(w,b)}{\partial w}  &= \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)})x^{(i)} \\
+  \frac{\partial J(w,b)}{\partial b}  &= \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)}) \\
 \end{align}
 $$
 
@@ -201,7 +202,7 @@ Let's think a bit about how you might interpret these parameters: if the model i
 Each row of the matrix represents one example. When you have $m$ training examples, and there are $n$ features, $\mathbf{X}$ is a matrix with dimensions ($m$, $n$) (m rows, n columns).
 
 
-$$\mathbf{X} =
+$$ \mathbf{X} =
 \begin{pmatrix}
  x^{(0)}_0 & x^{(0)}_1 & \cdots & x^{(0)}_{n-1} \\
  x^{(1)}_0 & x^{(1)}_1 & \cdots & x^{(1)}_{n-1} \\
@@ -217,7 +218,7 @@ notation:
 * $\mathbf{w}$ is a vector with $n$ elements.
   - Each element contains the parameter associated with one feature.
 
-$$\mathbf{w} = \begin{pmatrix}
+$$ \mathbf{w} = \begin{pmatrix}
 w_0 \\
 w_1 \\
 \cdots\\
@@ -229,9 +230,9 @@ $$
 ### Model Prediction With Multiple Variables
 The model's prediction with multiple variables is given by the linear model:
 
-$$ f_{\mathbf{w},b}(\mathbf{x}) =  w_0x_0 + w_1x_1 +... + w_{n-1}x_{n-1} + b \tag{1}$$
+$$ f_{\mathbf{w},b}(\mathbf{x}) =  w_0x_0 + w_1x_1 +... + w_{n-1}x_{n-1} + b  $$
 or in vector notation:
-$$ f_{\mathbf{w},b}(\mathbf{x}) = \mathbf{w} \cdot \mathbf{x} + b  \tag{2} $$
+$$ f_{\mathbf{w},b}(\mathbf{x}) = \mathbf{w} \cdot \mathbf{x} + b  $$
 where $\cdot$ is a vector `dot product`
 
 ```python
@@ -252,9 +253,9 @@ def predict(x, w, b):
 
 ### Compute Cost With Multiple Variables
 The equation for the cost function with multiple variables $J(\mathbf{w},b)$ is:
-$$J(\mathbf{w},b) = \frac{1}{2m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})^2 \tag{3}$$
+$$ J(\mathbf{w},b) = \frac{1}{2m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})^2 $$
 where:
-$$ f_{\mathbf{w},b}(\mathbf{x}^{(i)}) = \mathbf{w} \cdot \mathbf{x}^{(i)} + b  \tag{4} $$
+$$ f_{\mathbf{w},b}(\mathbf{x}^{(i)}) = \mathbf{w} \cdot \mathbf{x}^{(i)} + b $$
 
 
 In contrast to the simple case of regression, $\mathbf{w}$ and $\mathbf{x}^{(i)}$ are vectors rather than scalars supporting multiple features.
@@ -284,17 +285,17 @@ def compute_cost(X, y, w, b):
 ### Gradient Descent With Multiple Variables
 Gradient descent for multiple variables:
 
-$$\begin{align*} \text{repeat}&\text{ until convergence:} \; \lbrace \newline\;
-& w_j = w_j -  \alpha \frac{\partial J(\mathbf{w},b)}{\partial w_j} \tag{5}  \; & \text{for j = 0..n-1}\newline
+$$ \begin{align*} \text{repeat}&\text{ until convergence:} \; \lbrace \newline\;
+& w_j = w_j -  \alpha \frac{\partial J(\mathbf{w},b)}{\partial w_j}  \; & \text{for j = 0..n-1}\newline
 &b\ \ = b -  \alpha \frac{\partial J(\mathbf{w},b)}{\partial b}  \newline \rbrace
-\end{align*}$$
+\end{align*} $$
 
 where, n is the number of features, parameters $w_j$,  $b$, are updated simultaneously and where
 
 $$
 \begin{align}
-\frac{\partial J(\mathbf{w},b)}{\partial w_j}  &= \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})x_{j}^{(i)} \tag{6}  \\
-\frac{\partial J(\mathbf{w},b)}{\partial b}  &= \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)}) \tag{7}
+\frac{\partial J(\mathbf{w},b)}{\partial w_j}  &= \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})x_{j}^{(i)} \\
+\frac{\partial J(\mathbf{w},b)}{\partial b}  &= \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})
 \end{align}
 $$
 * m is the number of training examples in the data set
@@ -501,13 +502,13 @@ After z-score normalization, all features will have a mean of 0 and a standard d
 To implement z-score normalization, adjust your input values as shown in this formula:
 
 $$
-x^{(i)}_j = \dfrac{x^{(i)}_j - \mu_j}{\sigma_j} \tag{4}
+x^{(i)}_j = \dfrac{x^{(i)}_j - \mu_j}{\sigma_j}
 $$
 where $j$ selects a feature or a column in the $\mathbf{X}$ matrix. $µ_j$ is the mean of all the values for feature (j) and $\sigma_j$ is the standard deviation of feature (j).
 $$
 \begin{align}
-\mu_j &= \frac{1}{m} \sum_{i=0}^{m-1} x^{(i)}_j \tag{5}\\
-\sigma^2_j &= \frac{1}{m} \sum_{i=0}^{m-1} (x^{(i)}_j - \mu_j)^2  \tag{6}
+\mu_j &= \frac{1}{m} \sum_{i=0}^{m-1} x^{(i)}_j \\
+\sigma^2_j &= \frac{1}{m} \sum_{i=0}^{m-1} (x^{(i)}_j - \mu_j)^2
 \end{align}
 $$
 
@@ -725,7 +726,7 @@ We would like the predictions of our classification model to be between 0 and 1 
 
 The formula for a sigmoid function is as follows:
 
-$$g(z) = \frac{1}{1+e^{-z}}\tag{1}$$
+$$ g(z) = \frac{1}{1+e^{-z}} $$
 
 In the case of logistic regression, $z$ (the input to the sigmoid function), is the output of a linear regression model.
 
@@ -757,12 +758,12 @@ As you can see, the sigmoid function approaches  `0` as `z` goes to large negati
 A logistic regression model **applies the sigmoid to the familiar linear regression model**:
 
 $$
-f_{\mathbf{w},b}(\mathbf{x}^{(i)}) = g(\mathbf{w} \cdot \mathbf{x}^{(i)} + b ) \tag{2}
+f_{\mathbf{w},b}(\mathbf{x}^{(i)}) = g(\mathbf{w} \cdot \mathbf{x}^{(i)} + b )
 $$
 
   where
 
-  $$g(z) = \frac{1}{1+e^{-z}}\tag{3}$$
+  $$ g(z) = \frac{1}{1+e^{-z}} $$
 
 ![img](./assets/C1_W3_LogisticRegression_right.png)
 
