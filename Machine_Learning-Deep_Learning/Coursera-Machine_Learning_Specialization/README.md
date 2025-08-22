@@ -14,8 +14,8 @@ $$ J(w,b) = \frac{1}{2m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)})^
 *Gradient descent* is described as (repeat until convergence):
 
 $$
-w = w - \alpha \frac{\partial J(w,b)}{\partial w} \newline
-b = b - \alpha \frac{\partial J(w,b)}{\partial b} \newline
+w = w - \alpha \frac{\partial J(w,b)}{\partial w} \\
+b = b - \alpha \frac{\partial J(w,b)}{\partial b}
 $$
 
 where, parameters $w$, $b$ are updated simultaneously.
@@ -24,7 +24,7 @@ The gradient is defined as:
 
 $$
 \frac{\partial J(w,b)}{\partial w} = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)})x^{(i)} \\
-\frac{\partial J(w,b)}{\partial b} = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)}) \\
+\frac{\partial J(w,b)}{\partial b} = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{w,b}(x^{(i)}) - y^{(i)})
 $$
 
 Here *simultaniously* means that you calculate the partial derivatives for all the parameters before updating any of the parameters.
