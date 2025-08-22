@@ -787,7 +787,7 @@ $$
 
 ![img](./assets/C1_W3_LogisticRegression_right.png)
 
-In the figure below, note how the function $z = w \cdot x + b$ (the familiar linear regression) moves and defines the shape of the sigmoid function, which in turn performs the classification of the elements by applying a threshold.
+In the figure below, note how the function $z = w \cdot x + b$ (the familiar linear regression) moves and defines the shape of the sigmoid function, which in turn allows performing the classification of the elements by applying a threshold.
 
 ![img](./assets/sigmoid_func2.jpg)
 
@@ -830,3 +830,69 @@ Let's see what this looks like graphically. We'll start by plotting $-3 + x_0+x_
 * We can say that, **for every combination of values $x_0$ and $x_1$ which meet the condition given by the equation $-3 + x_0+x_1 < 0$, the result will lie in the shaded region, so they will be classified as $y=0$**.
 
 By using higher order polynomial terms (eg: $f(x) = g( x_0^2 + x_1 -1)$, we can come up with more complex non-linear boundaries.
+
+### Logistic Loss
+Recall for **Linear** Regression we have used the **squared error cost function**, which had the nice property of being **convex**, and that following the derivative of the cost leads to the minimum.
+
+![img](./assets/linreg_conv.jpg)
+
+However, for logistic regression $f_{wb}(x)$ **has a non-linear component**, the sigmoid function:   $f_{w,b}(x^{(i)}) = sigmoid(wx^{(i)} + b )$.   Let's try a squared error cost now including the sigmoid.
+
+![img](./assets/linreg_nonconv.jpg)
+
+While this produces a pretty interesting plot, the surface above not nearly as smooth as the 'soup bowl' from linear regression!
+**Logistic regression requires a cost function more suitable to its non-linear nature**. This starts with a Loss function. This is described below.
+
+![img](./assets/logreg_loss.jpg)
+
+Logistic Regression uses a loss function more suited to the task of categorization where the target is 0 or 1 rather than any number.
+
+>**Definition Note:**
+**Loss** is a measure of the difference of a single example to its target value while the
+**Cost** is a measure of the losses over the training set
+
+
+This is defined:
+* $loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)})$ is the cost for a single data point, which is:
+
+$$
+loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)}) = \begin{cases}
+- \log\left(f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right) & \text{if $y^{(i)}=1$}\\
+- \log \left( 1 - f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right) & \text{if $y^{(i)}=0$}
+\end{cases}
+$$
+
+*  $f_{\mathbf{w},b}(\mathbf{x}^{(i)})$ is the model's prediction, while $y^{(i)}$ is the target value.
+
+*  $f_{\mathbf{w},b}(\mathbf{x}^{(i)}) = g(\mathbf{w} \cdot\mathbf{x}^{(i)}+b)$ where function $g$ is the sigmoid function.
+
+The defining feature of this loss function is the fact that it uses two separate curves. One for the case when the target is zero or ($y=0$) and another for when the target is one ($y=1$). Combined, these curves provide the behavior useful for a loss function, namely, being zero when the prediction matches the target and rapidly increasing in value as the prediction differs from the target. Consider the curves below:
+
+![img](./assets/logreg_loss2.jpg)
+
+The loss function above can be rewritten to be easier to implement.
+$$
+loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)}) = (-y^{(i)} \log\left(f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right) - \left( 1 - y^{(i)}\right) \log \left( 1 - f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right)$$
+
+Consider $y^{(i)}$ can have only two values, 0 and 1. One can then consider the equation in two pieces:
+when $ y^{(i)} = 0$, the left-hand term is eliminated:
+
+$$
+\begin{align}
+loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), 0) &= -\log \left( 1 - f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right)
+\end{align}
+$$
+
+and when $ y^{(i)} = 1$, the right-hand term is eliminated:
+
+$$
+\begin{align}
+loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), 1) &=  -\log\left(f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right)
+\end{align}
+$$
+
+Let's take a look at the cost vs parameters curve for the simple example we considered above:
+
+![img](./assets/logreg_loss3.jpg)
+
+This curve is well suited to gradient descent! It does not have plateaus, local minima, or discontinuities. Note, it is not a bowl as in the case of squared error. Both the cost and the log of the cost are plotted to illuminate the fact that the curve, when the cost is small, has a slope and continues to decline.
