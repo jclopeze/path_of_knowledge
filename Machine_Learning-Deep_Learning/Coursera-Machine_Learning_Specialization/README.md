@@ -521,7 +521,10 @@ $$
 where $j$ selects a feature or a column in the $\mathbf{X}$ matrix. $µ_j$ is the mean of all the values for feature (j) and $\sigma_j$ is the standard deviation of feature (j).
 
 $$
-\mu_j = \frac{1}{m} \sum_{i=0}^{m-1} x^{(i)}_j\\
+\mu_j = \frac{1}{m} \sum_{i=0}^{m-1} x^{(i)}_j
+$$
+
+$$
 \sigma^2_j = \frac{1}{m} \sum_{i=0}^{m-1} (x^{(i)}_j - \mu_j)^2
 $$
 
