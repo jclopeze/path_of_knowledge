@@ -209,7 +209,7 @@ Each row of the matrix represents one example. When you have $m$ training exampl
 ![img](./assets/matX.jpg)
 
 notation:
-- $\mathbf{x}^{(i)}$ is vector containing example i. $\mathbf{x}^{(i)} = (x^{(i)}_0, x^{(i)}_1, \cdots,x^{(i)}_{n-1})$
+- $\mathbf{x}^{(i)}$ is vector containing example i. $`\mathbf{x}^{(i)} = (x^{(i)}_0, x^{(i)}_1, \cdots,x^{(i)}_{n-1})`$
 - $x^{(i)}_j$ is element j in example i. The superscript in parenthesis indicates the example number while the subscript represents an element.
 
 ### Parameter vector w, b
