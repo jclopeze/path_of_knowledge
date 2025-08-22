@@ -208,12 +208,11 @@ Each row of the matrix represents one example. When you have $m$ training exampl
 
 
 $$
-\mathbf{X} =
-\begin{pmatrix}
- x^{(0)}_0 & x^{(0)}_1 & \cdots & x^{(0)}_{n-1} \\
- x^{(1)}_0 & x^{(1)}_1 & \cdots & x^{(1)}_{n-1} \\
- \cdots \\
- x^{(m-1)}_0 & x^{(m-1)}_1 & \cdots & x^{(m-1)}_{n-1}
+\mathbf{X} = \begin{pmatrix}
+x^{(0)}_0 & x^{(0)}_1 & \cdots & x^{(0)}_{n-1} \\
+x^{(1)}_0 & x^{(1)}_1 & \cdots & x^{(1)}_{n-1} \\
+\cdots \\
+x^{(m-1)}_0 & x^{(m-1)}_1 & \cdots & x^{(m-1)}_{n-1}
 \end{pmatrix}
 $$
 
