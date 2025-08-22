@@ -296,18 +296,23 @@ def compute_cost(X, y, w, b):
 ```
 
 ### Gradient Descent With Multiple Variables
-Gradient descent for multiple variables:
+Gradient descent for multiple variables (repeat until convergence):
 
 $$
-\text{repeat until convergence:} \; \lbrace \newline\;
-w_j = w_j -  \alpha \frac{\partial J(\mathbf{w},b)}{\partial w_j}  \; \text{for j = 0..n-1}\newline
-b\ \ = b -  \alpha \frac{\partial J(\mathbf{w},b)}{\partial b}  \newline \rbrace
+w_j = w_j - \alpha \frac{\partial J(\mathbf{w},b)}{\partial w_j}
+$$
+
+$$
+b = b - \alpha \frac{\partial J(\mathbf{w},b)}{\partial b}
 $$
 
 where, n is the number of features, parameters $w_j$,  $b$, are updated simultaneously and where
 
 $$
-\frac{\partial J(\mathbf{w},b)}{\partial w_j}  = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})x_{j}^{(i)} \\
+\frac{\partial J(\mathbf{w},b)}{\partial w_j}  = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})x_{j}^{(i)}
+$$
+
+$$
 \frac{\partial J(\mathbf{w},b)}{\partial b}  = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})
 $$
 
