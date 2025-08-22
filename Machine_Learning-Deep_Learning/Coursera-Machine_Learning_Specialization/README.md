@@ -77,7 +77,7 @@ Here are a few ways to feel this:
   * If $e_i>0$ but $x_{ij}<0$, increasing $w_j$ actually **reduces** $\hat y_i$ (because $x_{ij}$ is negative), so $e_i x_{ij}<0$ and the update pushes $w_j$ **up**.
     The $x_{ij}$ factor captures not just “how much” but also **which way** that example wants $w_j$ to move.
 
-* **Correlation view (vector form).** The full gradient is $ \nabla_w J=\tfrac{1}{m}X^\top e$. The $j$-th component is proportional to the **correlation between feature $j$** (the $j$-th column of $X$) **and the residuals** $e$. If residuals and feature $j$ line up (positive correlation), you must move $w_j$ negative to decorrelate them; if they’re anti-aligned, move it positive. At the optimum, $X^\top e=0$: residuals are orthogonal to every feature—no feature can “explain” what’s left.
+* **Correlation view (vector form).** The full gradient is $\nabla_w J=\tfrac{1}{m}X^\top e$. The $j$-th component is proportional to the **correlation between feature $j$** (the $j$-th column of $X$) **and the residuals** $e$. If residuals and feature $j$ line up (positive correlation), you must move $w_j$ negative to decorrelate them; if they’re anti-aligned, move it positive. At the optimum, $X^\top e=0$: residuals are orthogonal to every feature—no feature can “explain” what’s left.
 
 * **Finite-difference sanity check.** Suppose two examples both have error $e=+1$, but one has $x_{ij}=100$ and the other $x_{ij}=1$. A small step $\delta$ in $w_j$ changes their losses by $100\delta$ vs $1\delta$. It’d be wrong for them to pull equally on $w_j$; the gradient weights them 100:1, exactly matching their sensitivities.
 
@@ -207,7 +207,8 @@ Let's think a bit about how you might interpret these parameters: if the model i
 Each row of the matrix represents one example. When you have $m$ training examples, and there are $n$ features, $\mathbf{X}$ is a matrix with dimensions ($m$, $n$) (m rows, n columns).
 
 
-$$ \mathbf{X} =
+$$
+\mathbf{X} =
 \begin{pmatrix}
  x^{(0)}_0 & x^{(0)}_1 & \cdots & x^{(0)}_{n-1} \\
  x^{(1)}_0 & x^{(1)}_1 & \cdots & x^{(1)}_{n-1} \\
@@ -215,8 +216,9 @@ $$ \mathbf{X} =
  x^{(m-1)}_0 & x^{(m-1)}_1 & \cdots & x^{(m-1)}_{n-1}
 \end{pmatrix}
 $$
+
 notation:
-- $\mathbf{x}^{(i)}$ is vector containing example i. $\mathbf{x}^{(i)}$ $ = (x^{(i)}_0, x^{(i)}_1, \cdots,x^{(i)}_{n-1})$
+- $\mathbf{x}^{(i)}$ is vector containing example i. $\mathbf{x}^{(i)} = (x^{(i)}_0, x^{(i)}_1, \cdots,x^{(i)}_{n-1})$
 - $x^{(i)}_j$ is element j in example i. The superscript in parenthesis indicates the example number while the subscript represents an element.
 
 ### Parameter vector w, b
@@ -235,9 +237,16 @@ $$
 ### Model Prediction With Multiple Variables
 The model's prediction with multiple variables is given by the linear model:
 
-$$ f_{\mathbf{w},b}(\mathbf{x}) =  w_0x_0 + w_1x_1 +... + w_{n-1}x_{n-1} + b  $$
+$$
+f_{\mathbf{w},b}(\mathbf{x}) =  w_0x_0 + w_1x_1 +... + w_{n-1}x_{n-1} + b
+$$
+
 or in vector notation:
-$$ f_{\mathbf{w},b}(\mathbf{x}) = \mathbf{w} \cdot \mathbf{x} + b  $$
+
+$$
+f_{\mathbf{w},b}(\mathbf{x}) = \mathbf{w} \cdot \mathbf{x} + b
+$$
+
 where $\cdot$ is a vector `dot product`
 
 ```python
@@ -258,9 +267,15 @@ def predict(x, w, b):
 
 ### Compute Cost With Multiple Variables
 The equation for the cost function with multiple variables $J(\mathbf{w},b)$ is:
-$$ J(\mathbf{w},b) = \frac{1}{2m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})^2 $$
+$$
+J(\mathbf{w},b) = \frac{1}{2m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})^2
+$$
+
 where:
-$$ f_{\mathbf{w},b}(\mathbf{x}^{(i)}) = \mathbf{w} \cdot \mathbf{x}^{(i)} + b $$
+
+$$
+f_{\mathbf{w},b}(\mathbf{x}^{(i)}) = \mathbf{w} \cdot \mathbf{x}^{(i)} + b
+$$
 
 
 In contrast to the simple case of regression, $\mathbf{w}$ and $\mathbf{x}^{(i)}$ are vectors rather than scalars supporting multiple features.
@@ -509,7 +524,9 @@ To implement z-score normalization, adjust your input values as shown in this fo
 $$
 x^{(i)}_j = \dfrac{x^{(i)}_j - \mu_j}{\sigma_j}
 $$
+
 where $j$ selects a feature or a column in the $\mathbf{X}$ matrix. $µ_j$ is the mean of all the values for feature (j) and $\sigma_j$ is the standard deviation of feature (j).
+
 $$
 \begin{align}
 \mu_j &= \frac{1}{m} \sum_{i=0}^{m-1} x^{(i)}_j \\
