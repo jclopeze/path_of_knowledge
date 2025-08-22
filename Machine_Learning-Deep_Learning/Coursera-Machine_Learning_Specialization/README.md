@@ -871,7 +871,7 @@ $$
 loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)}) = (-y^{(i)} \log\left(f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right) - \left( 1 - y^{(i)}\right) \log \left( 1 - f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right)
 $$
 
-Consider $y^{(i)}$ can have only two values, 0 and 1. One can then consider the equation in two pieces:
+Consider $y^{(i)}$ **can have only two values, 0 and 1**. One can then consider the equation in two pieces:
 when $`y^{(i)} = 0`$, the left-hand term is eliminated:
 
 $$
@@ -892,4 +892,4 @@ Let's take a look at the cost vs parameters curve for the simple example we cons
 
 ![img](./assets/logreg_loss3.jpg)
 
-This curve is well suited to gradient descent! It does not have plateaus, local minima, or discontinuities. Note, it is not a bowl as in the case of squared error. Both the cost and the log of the cost are plotted to illuminate the fact that the curve, when the cost is small, has a slope and continues to decline.
+**This curve is well suited to gradient descent**! It does not have plateaus, local minima, or discontinuities. Note, it is not a bowl as in the case of squared error. Both the cost and the log of the cost are plotted to illuminate the fact that the curve, when the cost is small, has a slope and continues to decline.
