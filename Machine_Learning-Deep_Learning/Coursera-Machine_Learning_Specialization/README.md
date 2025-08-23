@@ -868,7 +868,7 @@ The defining feature of this loss function is the fact that it uses two separate
 The loss function above can be rewritten to be easier to implement.
 
 $$
-loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)}) = (-y^{(i)} \log\left(f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right) - \left( 1 - y^{(i)}\right) \log \left( 1 - f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right)
+loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)}) = -y^{(i)} \log\left(f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right) - \left( 1 - y^{(i)}\right) \log \left( 1 - f_{\mathbf{w},b}\left( \mathbf{x}^{(i)} \right) \right)
 $$
 
 Consider $y^{(i)}$ **can have only two values, 0 and 1**. One can then consider the equation in two pieces:
@@ -893,3 +893,165 @@ Let's take a look at the cost vs parameters curve for the simple example we cons
 ![img](./assets/logreg_loss3.jpg)
 
 **This curve is well suited to gradient descent**! It does not have plateaus, local minima, or discontinuities. Note, it is not a bowl as in the case of squared error. Both the cost and the log of the cost are plotted to illuminate the fact that the curve, when the cost is small, has a slope and continues to decline.
+
+### Cost function
+Here you combine the losses to form the **cost**, which includes all the examples.
+
+for logistic regression, the cost function is of the form
+
+$$
+J(\mathbf{w},b) = \frac{1}{m} \sum_{i=0}^{m-1} \left[ loss(f_{\mathbf{w},b}(\mathbf{x}^{(i)}), y^{(i)}) \right]
+$$
+
+where $m$ is the number of training examples in the data set and:
+
+$$
+f_{\mathbf{w},b}(\mathbf{x^{(i)}}) = g(z^{(i)})
+$$
+
+$$
+z^{(i)} = \mathbf{w} \cdot \mathbf{x}^{(i)}+ b
+$$
+
+$$
+g(z^{(i)}) = \frac{1}{1+e^{-z^{(i)}}}
+$$
+
+#### Code Description
+
+The algorithm for `compute_cost_logistic` loops over all the examples calculating the loss for each example and accumulating the total.
+```python
+def compute_cost_logistic(X, y, w, b):
+    """
+    Computes cost
+
+    Args:
+      X (ndarray (m,n)): Data, m examples with n features
+      y (ndarray (m,)) : target values
+      w (ndarray (n,)) : model parameters
+      b (scalar)       : model parameter
+
+    Returns:
+      cost (scalar): cost
+    """
+
+    m = X.shape[0]
+    cost = 0.0
+    for i in range(m):
+        z_i = np.dot(X[i],w) + b
+        f_wb_i = sigmoid(z_i)
+        cost += -y[i]*np.log(f_wb_i) - (1-y[i])*np.log(1-f_wb_i)
+
+    cost = cost / m
+    return cost
+```
+
+Let's see how the cost would change for different values of one of the parameters (in this case, $b$):
+
+
+![img](./assets/logreg_loss4.jpg)
+
+```bash
+Cost for b = -3 :  0.36686678640551745
+Cost for b = -4 :  0.5036808636748461
+```
+You can see the cost function behaves as expected and the cost for `b = -4` is indeed higher than the cost for `b = -3`.
+
+## Gradient Descent for Logistic Regression
+
+For Logistic Regression the gradient function looks exactly the same as for Linear Regression:
+
+$$
+\frac{\partial J(\mathbf{w},b)}{\partial w_j} = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})x_{j}^{(i)}
+$$
+
+$$
+\frac{\partial J(\mathbf{w},b)}{\partial b} = \frac{1}{m} \sum\limits_{i = 0}^{m-1} (f_{\mathbf{w},b}(\mathbf{x}^{(i)}) - y^{(i)})
+$$
+
+- To implement the gradient descent; for each example:
+    - calculate the error for that example $`g(\mathbf{w} \cdot \mathbf{x}^{(i)} + b) - \mathbf{y}^{(i)}`$
+    - for each input value $`x_{j}^{(i)}`$ in this example,
+        - multiply the error by the input  $`x_{j}^{(i)}`$, and add to the corresponding element of `dj_dw`.
+    - add the error to `dj_db`
+
+- divide `dj_db` and `dj_dw` by total number of examples (m)
+
+```python
+def compute_gradient_logistic(X, y, w, b):
+    """
+    Computes the gradient for linear regression
+
+    Args:
+      X (ndarray (m,n): Data, m examples with n features
+      y (ndarray (m,)): target values
+      w (ndarray (n,)): model parameters
+      b (scalar)      : model parameter
+    Returns
+      dj_dw (ndarray (n,)): The gradient of the cost w.r.t. the parameters w.
+      dj_db (scalar)      : The gradient of the cost w.r.t. the parameter b.
+    """
+    m,n = X.shape
+    dj_dw = np.zeros((n,))                           #(n,)
+    dj_db = 0.
+
+    for i in range(m):
+        f_wb_i = sigmoid(np.dot(X[i],w) + b)          #(n,)(n,)=scalar
+        err_i  = f_wb_i  - y[i]                       #scalar
+        for j in range(n):
+            dj_dw[j] = dj_dw[j] + err_i * X[i,j]      #scalar
+        dj_db = dj_db + err_i
+    dj_dw = dj_dw/m                                   #(n,)
+    dj_db = dj_db/m                                   #scalar
+
+    return dj_db, dj_dw
+
+def gradient_descent(X, y, w_in, b_in, alpha, num_iters):
+    """
+    Performs batch gradient descent
+
+    Args:
+      X (ndarray (m,n)   : Data, m examples with n features
+      y (ndarray (m,))   : target values
+      w_in (ndarray (n,)): Initial values of model parameters
+      b_in (scalar)      : Initial values of model parameter
+      alpha (float)      : Learning rate
+      num_iters (scalar) : number of iterations to run gradient descent
+
+    Returns:
+      w (ndarray (n,))   : Updated values of parameters
+      b (scalar)         : Updated value of parameter
+    """
+    # An array to store cost J and w's at each iteration primarily for graphing later
+    J_history = []
+    w = copy.deepcopy(w_in)  #avoid modifying global w within function
+    b = b_in
+
+    for i in range(num_iters):
+        # Calculate the gradient and update the parameters
+        dj_db, dj_dw = compute_gradient_logistic(X, y, w, b)
+
+        # Update Parameters using w, b, alpha and gradient
+        w = w - alpha * dj_dw
+        b = b - alpha * dj_db
+
+        # Save cost J at each iteration
+        if i<100000:      # prevent resource exhaustion
+            J_history.append( compute_cost_logistic(X, y, w, b) )
+
+        # Print cost every at intervals 10 times or as many iterations if < 10
+        if i% math.ceil(num_iters / 10) == 0:
+            print(f"Iteration {i:4d}: Cost {J_history[-1]}   ")
+
+    return w, b, J_history         #return final w,b and J history for graphing
+```
+
+### Examples
+For a given dataset, we can plot the decision boundary, as well as the probability of `y = 1`:
+
+![img](./assets/logreg_prob.jpg)
+
+#### Another Data set
+Let's return to a one-variable data set. With just two parameters, $w$, $b$, it is possible to plot the cost function using a contour plot to get a better idea of what gradient descent is up to.
+
+![img](./assets/logreg_examp.jpg)
