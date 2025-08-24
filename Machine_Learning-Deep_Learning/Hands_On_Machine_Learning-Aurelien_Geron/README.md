@@ -445,6 +445,220 @@ A sparse matrix is a very efficient representation for matrices that contain mos
 Tip: If a categorical attribute has a large number of possible categories (e.g., country code, profession, species), then one-hot encoding will result in a large number of input features. When dealing with neural networks, you can replace each category with a learnable, low-dimensional vector called an embedding.
 
 
+# Training Models
+
+## Linear Regression
+A linear model makes a prediction by simply computing a weighted sum of the input features, plus a constant called the bias term.
+
+![img](./assets/eq-4_1.jpg)
+
+This can be written much more concisely using a *vectorized form*:
+
+![img](./assets/eq-4_2.jpg)
+
+To train a linear regression model, we need to find the value of $θ$ that minimizes the RMSE.
+
+A good performance metric is as close as possible to the final business objective. **A good training loss is easy to optimize and strongly correlated with the metric**.  The **log loss** is easy to minimize, and doing so will usually **improve precision/recall**.
+
+The MSE of a linear regression hypothesis $hθ$ on a training set $X$ is calculated using:
+
+![img](./assets/eq-4_3.jpg)
+
+### The Normal Equation
+To find the value of θ that minimizes the MSE, there exists a **closed-form solution**—in other words, a mathematical equation that gives the result directly. This is called the **Normal equation**.
+
+![img](./assets/eq-4_4.jpg)
+
+```python
+import numpy as np
+from sklearn.preprocessing import add_dummy_feature
+
+np.random.seed(42)
+m = 100
+
+b = 4
+w = 3
+
+X = 2 * np.random.rand(m, 1)        # random numbers from a uniform distribution
+y = b + w*X + np.random.randn(m, 1) # random numbers from a standard normal distribution
+X_b = add_dummy_feature(X)
+theta_best = np.linalg.inv(X_b.T @ X_b) @ X_b.T @ y
+
+theta_best
+array([[4.21509616],    # Original 4
+       [2.77011339]])   # Original 3
+```
+Close enough, but the noise made it impossible to recover the exact parameters of the original function. The smaller and noisier the dataset, the harder it gets.
+
+```python
+import matplotlib.pyplot as plt
+
+X_new = np.array([[X.min()], [X.max()]])
+X_new_b = add_dummy_feature(X_new)
+y_predict = X_new_b @ theta_best
+y_predict
+array([[4.0699987 ],
+       [9.90576896]])
+
+plt.plot(X_new, y_predict, "r-", label="Predictions")
+plt.plot(X, y, "b.")
+plt.show()
+```
+
+![img](./assets/fig-4_2.jpg)
+
+Performing linear regression using Scikit-Learn:
+```python
+from sklearn.linear_model import LinearRegression
+
+lin_reg = LinearRegression()
+lin_reg.fit(X, y)
+
+lin_reg.intercept_, lin_reg.coef_
+(array([4.03716096]), array([[2.97329298]]))
+
+lin_reg.predict(X_new)
+array([[4.0699987 ],
+       [9.90576896]])
+```
+
+ The `LinearRegression` class is based on the `scipy.linalg.lstsq()` function (the name stands for “least squares”).
+ ```python
+theta_best_svd, residuals, rank, s = np.linalg.lstsq(X_b, y, rcond=1e-6)
+
+theta_best_svd
+array([[4.03716096],
+       [2.97329298]])
+ ```
+
+ ## Gradient Descent
+Gradient descent is a **generic optimization algorithm** capable of finding optimal solutions to a wide range of problems. The general idea of gradient descent is to **tweak parameters iteratively** in order to minimize a cost function.
+
+Suppose you are lost in the mountains in a dense fog, and you can only feel the slope of the ground below your feet. A good strategy to get to the bottom of the valley quickly is to **go downhill in the direction of the steepest slope**. This is exactly what gradient descent does: it measures the **local gradient of the error function** with regard to the **parameter vector θ, and it goes in the direction of descending gradient**. Once the gradient is zero, you have reached a minimum!
+
+You start by filling θ with random values, and at each step attempting to decrease the cost function (e.g., the MSE), until the algorithm converges to a minimum.
+
+![img](./assets/fig-4_3.jpg)
+
+The size of the steps is determined by the learning rate hyperparameter. If the learning rate is too small, it will take a long time.
+
+![img](./assets/fig-4_4.jpg)
+
+If the learning rate is too high, you might jump across the valley and end up on the other side, possibly even higher up than you were before.
+
+![img](./assets/fig-4_5.jpg)
+
+It could converge to a local minimum, which is not as good as the global minimum, or it could take a very long time to cross the plateau.
+
+![img](./assets/fig-4_6.jpg)
+
+Fortunately, the MSE cost function for a linear regression model happens to be a convex function. This implies that there are no local minima, just one global minimum. So, gradient descent is guaranteed to approach arbitrarily closely the global minimum. However, it can be an elongated bowl if the features have very different scales. In that case, it will eventually reach the minimum, but it will take a long time.
+
+![img](./assets/fig-4_7.jpg)
+
+When using gradient descent, you should ensure that all features have a similar scale.
+
+**Training a model means searching for a combination of model parameters that minimizes a cost function (over the training set)**. It is a search in the model’s **parameter space**.
+
+### Batch Gradient Descent
+To implement gradient descent, you need to compute the gradient of the cost function with regard to each model parameter $θ_j$. In other words, you need to calculate **how much the cost function will change if you change $θ_j$ just a little bit**. This is called a **partial derivative**. It is like asking, “What is the slope of the mountain under my feet if I face east”? and then asking the same question facing north.
+
+![img](./assets/eq-4_5.jpg)
+
+To compute them all in one go: the gradient vector contains all the partial derivatives of the cost function:
+
+![img](./assets/eq-4_6.jpg)
+
+This formula involves calculations over the full training set $X$, at each gradient descent step! This is **why the algorithm is called batch gradient descent: it uses the whole batch of training data at every step**. It is terribly slow on very large training sets. However, gradient descent scales well with the number of features: it is much faster using gradient descent than using the Normal equation or SVD decomposition.
+
+Once you have the gradient vector, which points uphill, just go in the opposite direction to go downhill. Multiply the gradient vector by $η$ to determine the size of the downhill step:
+
+![img](./assets/eq-4_7.jpg)
+
+```python
+eta = 0.1 # learning rate
+n_epochs = 1000
+m = len(X_b) # number of instances
+
+np.random.seed(42)
+theta = np.random.randn(2, 1) # randomly initialized model parameters
+
+for epoch in range(n_epochs):
+    gradients = 2 / m * X_b.T @ (X_b @ theta - y)
+    theta = theta - eta * gradients
+```
+Each iteration over the training set is called an **epoch**.
+Figure 4-8 shows the first 20 steps of gradient descent using three different learning rates. The line at the bottom of each plot represents the random starting point, then each epoch is represented by a darker and darker line.
+
+![img](./assets/fig-4_8.jpg)
+
+In the middle, the learning rate looks pretty good: in just a few epochs, it has already converged to the solution. On the right, the learning rate is too high: the algorithm *diverges*, jumping all over the place and actually getting further and further away from the solution at every step. To find a good learning rate, you can use grid search.
+A simple solution is to set a very large number of epochs but to interrupt the algorithm when the gradient vector becomes tiny: that is, when its norm becomes smaller than a tiny number (called the tolerance).
+
+### Stochastic Gradient Descent
+**Stochastic gradient descent picks a random instance in the training set at every step and computes the gradients based only on that single instance**. That makes the algorithm much faster and also makes it possible to train on huge training sets.
+
+Due to its stochastic nature, this algorithm is **much less regular** than batch gradient descent: instead of gently decreasing until it reaches the minimum, the cost function will bounce up and down, **decreasing only on average**. Over time it will end up very close to the minimum, but **once it gets there it will continue to bounce around**, never settling down. The final parameter values will be **good, but not optimal**.
+
+![img](./assets/fig-4_9.jpg)
+
+Stochastic gradient descent has a **better chance of finding the global minimum** than batch gradient descent does (it's more likely the algorithm jump out of local minima).
+
+One solution to the dilemma of "never settle at the minimum" is to **gradually reduce the learning rate**: get smaller and smaller steps, allowing the algorithm to settle at the global minimum (**learning schedule**).
+
+```python
+n_epochs = 50
+t0, t1 = 5, 50  # learning schedule hyperparameters
+
+def learning_schedule(t):
+    return t0 / (t + t1)
+
+np.random.seed(42)
+theta = np.random.randn(2, 1)  # random initialization
+
+for epoch in range(n_epochs):
+    for iteration in range(m):
+        random_index = np.random.randint(m)
+        xi = X_b[random_index : random_index + 1]
+        yi = y[random_index : random_index + 1]
+        gradients = 2 * xi.T @ (xi @ theta - yi)  # for SGD, do not divide by m
+        eta = learning_schedule(epoch * m + iteration)
+        theta = theta - eta * gradients
+
+theta
+array([[4.21076011],
+       [2.74856079]])
+```
+
+![img](./assets/fig-4_10.jpg)
+
+If you want to be sure that the algorithm goes through every instance at each epoch, another approach is to **shuffle the training set**, then go through it instance by instance, then shuffle it again, and so on (this aproach generally does not improve the result).
+
+When using stochastic gradient descent, the training instances must be independent and identically distributed (IID) to ensure that the parameters get pulled toward the global optimum, on average. A simple way to ensure this is to **shuffle the instances during training**.
+
+With Scikit-Learn, you can use the `SGDRegressor` class:
+
+```python
+from sklearn.linear_model import SGDRegressor
+sgd_reg = SGDRegressor(
+    max_iter=1000, tol=1e-5, penalty=None, eta0=0.01,
+    n_iter_no_change=100, random_state=42)
+sgd_reg.fit(X, y.ravel()) # y.ravel() because fit() expects 1D targets
+
+sgd_reg.intercept_, sgd_reg.coef_
+(array([4.21278812]), array([2.77270267]))
+```
+
+Some estimators also have a ``partial_fit()`` method that you can call to run a single round of training on one or more instances. This is useful when you need more control over the training process.
+
+### Mini-Batch Gradient Descent
+Mini-batch GD computes the gradients on **small random sets** of instances called **mini-batches**. You can get a **performance boost from hardware** optimization of matrix operations, especially when using **GPUs**.
+The algorithm’s progress in parameter space is less erratic than with stochastic GD, so mini-batch GD will end up walking around a bit closer to the minimum than stochastic GD, but it may be harder for it to escape from local minima.
+
+![img](./assets/fig-4_11.jpg)
+
+![img](./assets/table-4_1.jpg)
+
 # Introduction to Artificial Neural Networks with Keras
 Artificial neural networks (**ANNs**), machine learning models inspired by the networks of biological neurons found in our brains.
 TensorFlow’s Keras API: This is a beautifully designed and simple high-level API for building, training, evaluating, and running neural networks. It is expressive and flexible enough to let you build a wide variety of neural network architectures.
