@@ -531,7 +531,7 @@ array([[4.03716096],
        [2.97329298]])
  ```
 
- ## Gradient Descent
+## Gradient Descent
 Gradient descent is a **generic optimization algorithm** capable of finding optimal solutions to a wide range of problems. The general idea of gradient descent is to **tweak parameters iteratively** in order to minimize a cost function.
 
 Suppose you are lost in the mountains in a dense fog, and you can only feel the slope of the ground below your feet. A good strategy to get to the bottom of the valley quickly is to **go downhill in the direction of the steepest slope**. This is exactly what gradient descent does: it measures the **local gradient of the error function** with regard to the **parameter vector θ, and it goes in the direction of descending gradient**. Once the gradient is zero, you have reached a minimum!
@@ -658,6 +658,47 @@ The algorithm’s progress in parameter space is less erratic than with stochast
 ![img](./assets/fig-4_11.jpg)
 
 ![img](./assets/table-4_1.jpg)
+
+## Polynomial Regression
+You can use a linear model to fit nonlinear data. A simple way to do this is to **add powers of each feature as new features**, then train a linear model on this extended set of features. This technique is called **polynomial regression**.
+We’ll generate some nonlinear data based on a simple quadratic equation $`y = ax² + bx + c`$ (plus some noise).
+```python
+np.random.seed(42)
+m = 100
+X = 6 * np.random.rand(m, 1) - 3
+y = 0.5 * X ** 2 + X + 2 + np.random.randn(m, 1)
+```
+
+![img](./assets/fig-4_12.jpg)
+
+Let’s use Scikit-Learn’s `PolynomialFeatures` class to transform our training data, **adding** the square (second-degree polynomial) **of each feature** in the training set **as a new feature**.
+
+```python
+from sklearn.preprocessing import PolynomialFeatures
+
+poly_features = PolynomialFeatures(degree=2, include_bias=False)
+X_poly = poly_features.fit_transform(X)
+
+X[0]
+array([-0.75275929])
+
+X_poly[0]
+array([-0.75275929, 0.56664654])
+```
+`X_poly` now contains the original feature of `X` plus the square of this feature.
+
+```python
+lin_reg = LinearRegression()
+lin_reg.fit(X_poly, y)
+lin_reg.intercept_, lin_reg.coef_
+```
+
+![img](./assets/fig-4_13.jpg)
+
+Not bad: the model estimates $\hat y = 0.56 x^{2}_1 + 0.93 x_1 + 1.78$ when in fact the original function was $y = 0.5 x^{2}_1 + 1 x_1 + 2.0$ + Gaussian noise
+
+**When there are multiple features, polynomial regression is capable of finding relationships between features**. `PolynomialFeatures` also adds all combinations of features up to the given degree. For example, with `degree=3` would not only add the features $a^2$, $a^3$, $b^2$, and $b^3$, but also the combinations $ab$, $a^2b$, and $ab^2$.
+
 
 # Introduction to Artificial Neural Networks with Keras
 Artificial neural networks (**ANNs**), machine learning models inspired by the networks of biological neurons found in our brains.
